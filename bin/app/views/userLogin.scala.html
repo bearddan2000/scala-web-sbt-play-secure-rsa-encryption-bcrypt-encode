@@ -1,0 +1,74 @@
+@(
+    form: Form[models.User],
+    postUrl: Call
+)(implicit request: MessagesRequestHeader)
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
+</head>
+<!-- this is header -->
+<nav class="navbar navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Play Framework</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+        </div>
+    </div>
+</nav>
+<body id="user-login">
+  <div class="container">
+    <div class="row" style="margin-top:20px">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+        <h1>User Login</h1>
+
+        @request.flash.data.map{ case (name, value) =>
+            <div>@name: @value</div>
+        }
+
+        @* Global errors are not tied to any particular form field *@
+        @if(form.hasGlobalErrors) {
+            @form.globalErrors.map { error: FormError =>
+                <div>
+                    Error: @error.key: @error.message
+                </div>
+            }
+        }
+
+        @helper.form(postUrl, Symbol("id") -> "user-login-form") {
+
+              // @helper.CSRF.formField
+
+            <fieldset>
+                @helper.inputText(
+                    form("username"),
+                    Symbol("_label") -> "Username",
+                    Symbol("placeholder") -> "username",
+                    Symbol("id") -> "username",
+                    Symbol("size") -> 60
+                )
+
+                @helper.inputPassword(
+                    form("password"),
+                    Symbol("_label") -> "Password",
+                    Symbol("placeholder") -> "password",
+                    Symbol("id") -> "password",
+                    Symbol("size") -> 60
+                )
+
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        <input type="submit" class="btn btn-lg btn-primary btn-block" value="Sign In"/>
+                    </div>
+                </div>
+            </fieldset>
+            }
+      </div>
+</div>
+</div>
+</body>
+</html>
